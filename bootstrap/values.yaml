@@ -63,7 +63,7 @@ webterminal:
 compliance:
   path: compliance
   namespace: openshift-compliance
-  startingCSV: compliance-operator.x.y.z
+  # startingCSV: compliance-operator.x.y.z
   config:
     nodeSelector:
       node-role.kubernetes.io/worker: ""
