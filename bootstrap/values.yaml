@@ -57,3 +57,17 @@ rhsso:
 webterminal:
   path: webterminal
   # startingCSV: web-terminal.x.y.z
+
+# Set to empty to NOT install compliance
+# compliance: ''
+compliance:
+  path: compliance
+  namespace: openshift-compliance
+  startingCSV: compliance-operator.x.y.z
+  config:
+    nodeSelector:
+      node-role.kubernetes.io/worker: ""
+    # NOTE: hypershift only
+    # env:
+    # - name: PLATFORM
+    #   value: "HyperShift"
