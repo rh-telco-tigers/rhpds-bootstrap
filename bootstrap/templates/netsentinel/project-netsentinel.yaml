@@ -1,0 +1,20 @@
+{{- if .Values.apps.netsentinel.enabled }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: netsentinel
+  namespace: openshift-gitops
+  labels:
+    app.kubernetes.io/part-of: netsentinel
+spec:
+  description: Project for grouping NetSentinel-related ArgoCD apps
+  sourceRepos:
+    - '*'
+  destinations:
+    - namespace: '*'
+      server: '*'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+{{- end }}

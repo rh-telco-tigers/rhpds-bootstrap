@@ -6,7 +6,7 @@ metadata:
   name: rhoai
   namespace: openshift-gitops
 spec:
-  project: default
+  project: netsentinel
   source:
     repoURL: {{ get (get .Values.apps.netsentinel.components.rhoai "source" | default dict) "repoURL" | default .Values.source.repoURL }}
     targetRevision: {{ get (get .Values.apps.netsentinel.components.rhoai "source" | default dict) "revision" | default .Values.source.revision }}

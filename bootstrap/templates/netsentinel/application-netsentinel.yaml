@@ -6,7 +6,7 @@ metadata:
   name: netsentinel-apps
   namespace: openshift-gitops
 spec:
-  project: default
+  project: netsentinel
   source:
     repoURL: {{ .Values.apps.netsentinel.repo.url }}
     targetRevision: {{ .Values.apps.netsentinel.repo.ref }}

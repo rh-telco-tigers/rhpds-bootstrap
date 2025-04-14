@@ -30,7 +30,7 @@ gitops:
 
 apps:
   netsentinel:
-    enabled: true
+    enabled: false
     namespace: netsentinel
     repo:
       url: https://github.com/rh-telco-tigers/NetSentinel.git
