@@ -1,5 +1,5 @@
 source:
-  repoURL: https://github.com/pandeybk/rhpds-ocp-cluster-addons.git
+  repoURL: https://github.com/rh-telco-tigers/rhpds-ocp-cluster-addons.git
   revision: main
 
 
