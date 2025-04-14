@@ -43,14 +43,19 @@ apps:
           name: default-dsc
       webterminal:
         path: webterminal
+        namespace: openshift-operators
       amqstreams:
         path: amq-streams
+        namespace: openshift-operators
       serverless:
         path: serverless
+        namespace: openshift-serverless
       servicemesh:
         path: servicemesh2
+        namespace: openshift-operators
       minio:
         path: minio
+        namespace: netsentinel
       milvus:
         path: milvus
         namespace: milvus-operator
