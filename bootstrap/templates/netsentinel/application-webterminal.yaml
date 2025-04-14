@@ -1,0 +1,23 @@
+{{- if .Values.apps.netsentinel.enabled }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: webterminal
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: {{ get (get .Values.apps.netsentinel.components.webterminal "source" | default dict) "repoURL" | default .Values.source.repoURL }}
+    targetRevision: {{ get (get .Values.apps.netsentinel.components.webterminal "source" | default dict) "revision" | default .Values.source.revision }}
+    path: {{ .Values.apps.netsentinel.components.webterminal.path }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ default .Values.apps.netsentinel.namespace .Values.apps.netsentinel.components.webterminal.namespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+{{- end }}

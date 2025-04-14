@@ -1,5 +1,5 @@
-{{- if .Values.argocd.install }}
-{{- if .Values.rbac.clusterRoleBinding }}
+{{- if .Values.gitops.argocd.install }}
+{{- if .Values.gitops.rbac.clusterRoleBinding }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -8,20 +8,20 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ .Values.rbac.clusterRoleBinding.clusterRole }}
+  name: {{ .Values.gitops.rbac.clusterRoleBinding.clusterRole }}
 subjects:
 - kind: ServiceAccount
-  name: {{ .Values.rbac.clusterRoleBinding.serviceAccount }}
-  namespace: {{ .Values.argocd.namespace }}
+  name: {{ .Values.gitops.rbac.clusterRoleBinding.serviceAccount }}
+  namespace: {{ .Values.gitops.argocd.namespace }}
 {{- end }}
-{{- if .Values.rbac.group }}
+{{- if .Values.gitops.rbac.group }}
 ---
 apiVersion: user.openshift.io/v1
 kind: Group
 metadata:
-  name: {{ .Values.rbac.group.name }}
+  name: {{ .Values.gitops.rbac.group.name }}
 users:
-  {{- range .Values.rbac.group.users }}
+  {{- range .Values.gitops.rbac.group.users }}
   - {{ . }}
   {{- end }}
 {{- end }}

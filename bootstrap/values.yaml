@@ -1,13 +1,32 @@
-deployer:
-  domain: apps.cluster.opentlc.com
-  apiUrl: https://api.cluster.opentlc.com:6443
-
-git:
-  url: https://github.com/pandeybk/rhpds-ocp-cluster-addons.git
+source:
+  repoURL: https://github.com/pandeybk/rhpds-ocp-cluster-addons.git
   revision: main
 
-user:
-  count: "1"
+
+gitops:
+  operator:
+    install: true
+    name: openshift-gitops-operator
+    namespace: openshift-gitops-operator
+    channel: latest
+    installPlanApproval: Automatic
+    source: redhat-operators
+    sourceNamespace: openshift-marketplace
+
+  argocd:
+    install: true
+    name: openshift-gitops
+    namespace: openshift-gitops
+
+  rbac:
+    clusterRoleBinding:
+      clusterRole: cluster-admin
+      serviceAccount: openshift-gitops-argocd-application-controller
+    group:
+      name: cluster-admins
+      users:
+        - admin
+        - ssoadmin
 
 apps:
   netsentinel:
@@ -34,31 +53,7 @@ apps:
         path: minio
       milvus:
         path: milvus
+        namespace: milvus-operator
       additional:
         repoPath: k8s/helm
         repoRef: helmcharts
-
-gitops:
-  operator:
-    install: false
-    name: openshift-gitops-operator
-    namespace: openshift-gitops-operator
-    channel: latest
-    installPlanApproval: Automatic
-    source: redhat-operators
-    sourceNamespace: openshift-marketplace
-
-  argocd:
-    install: true
-    name: openshift-gitops
-    namespace: openshift-gitops
-
-  rbac:
-    clusterRoleBinding:
-      clusterRole: cluster-admin
-      serviceAccount: openshift-gitops-argocd-application-controller
-    group:
-      name: cluster-admins
-      users:
-        - admin
-        - ssoadmin

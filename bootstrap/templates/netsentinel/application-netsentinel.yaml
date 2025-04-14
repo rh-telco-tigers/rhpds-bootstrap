@@ -1,4 +1,4 @@
-{{ if .Values.netsentinel -}}
+{{- if .Values.apps.netsentinel.enabled }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -8,19 +8,20 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: {{ .Values.netsentinel.content.repoUrl }}
-    targetRevision: {{ .Values.netsentinel.content.repoRef }}
-    path: {{ .Values.netsentinel.addons.repoPath }}
+    repoURL: {{ .Values.apps.netsentinel.repo.url }}
+    targetRevision: {{ .Values.apps.netsentinel.repo.ref }}
+    path: {{ .Values.apps.netsentinel.components.additional.repoPath }}
     helm:
       values: |
-        user:
-          count: "{{ .Values.user.count }}"
-        deployer:
-          domain: {{ .Values.deployer.domain }}
-        content:
-          repoUrl: {{ .Values.netsentinel.content.repoUrl }}
-          repoRef: {{ .Values.netsentinel.content.repoRef }}
+        netsentinel:
+          replicas: 1
   destination:
-    server: 'https://kubernetes.default.svc'
-    namespace: netsentinel
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.apps.netsentinel.namespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
 {{- end }}

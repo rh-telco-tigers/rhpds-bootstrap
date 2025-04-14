@@ -1,4 +1,4 @@
-{{ if .Values.milvus -}}
+{{- if .Values.apps.netsentinel.enabled }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -8,11 +8,16 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: {{ .Values.git.url }}
-    targetRevision: {{ .Values.git.revision }}
-    path: {{ .Values.minio.path }}
-    helm:
+    repoURL: {{ get (get .Values.apps.netsentinel.components.minio "source" | default dict) "repoURL" | default .Values.source.repoURL }}
+    targetRevision: {{ get (get .Values.apps.netsentinel.components.minio "source" | default dict) "revision" | default .Values.source.revision }}
+    path: {{ .Values.apps.netsentinel.components.minio.path }}
   destination:
     server: https://kubernetes.default.svc
-    namespace: netsentinel
+    namespace: {{ default .Values.apps.netsentinel.namespace .Values.apps.netsentinel.components.minio.namespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
 {{- end }}

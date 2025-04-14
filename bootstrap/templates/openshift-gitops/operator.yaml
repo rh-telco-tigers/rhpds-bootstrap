@@ -1,9 +1,9 @@
-{{ if .Values.gitops.install -}}
+{{- if .Values.gitops.operator.install }}
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ .Values.gitops.namespace }}
+  name: {{ .Values.gitops.operator.namespace }}
   annotations:
     openshift.io/display-name: "GitOps Operator"
     openshift.io/description: "Red Hat OpenShift GitOps Operator"
@@ -11,23 +11,23 @@ metadata:
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
-  name: {{ .Values.gitops.name }}
-  namespace: {{ .Values.gitops.namespace }}
+  name: {{ .Values.gitops.operator.name }}
+  namespace: {{ .Values.gitops.operator.namespace }}
 spec:
   upgradeStrategy: Default
 ---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  name: {{ .Values.gitops.name }}
-  namespace: {{ .Values.gitops.namespace }}
+  name: {{ .Values.gitops.operator.name }}
+  namespace: {{ .Values.gitops.operator.namespace }}
 spec:
-  channel: {{ .Values.gitops.channel }}
-  installPlanApproval: {{ .Values.gitops.installPlanApproval }}
-  name: {{ .Values.gitops.name }}
-  source: {{ .Values.gitops.source }}
-  sourceNamespace: {{ .Values.gitops.sourceNamespace }}
-  {{- if .Values.gitops.startingCSV }}
-  startingCSV: {{ .Values.gitops.startingCSV }}
+  channel: {{ .Values.gitops.operator.channel }}
+  installPlanApproval: {{ .Values.gitops.operator.installPlanApproval }}
+  name: {{ .Values.gitops.operator.name }}
+  source: {{ .Values.gitops.operator.source }}
+  sourceNamespace: {{ .Values.gitops.operator.sourceNamespace }}
+  {{- if .Values.gitops.operator.startingCSV }}
+  startingCSV: {{ .Values.gitops.operator.startingCSV }}
   {{- end }}
 {{- end }}
