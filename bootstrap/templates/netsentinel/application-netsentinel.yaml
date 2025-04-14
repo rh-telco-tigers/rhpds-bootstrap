@@ -1,0 +1,26 @@
+{{ if .Values.netsentinel -}}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: netsentinel-apps
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: {{ .Values.netsentinel.content.repoUrl }}
+    targetRevision: {{ .Values.netsentinel.content.repoRef }}
+    path: {{ .Values.netsentinel.addons.repoPath }}
+    helm:
+      values: |
+        user:
+          count: "{{ .Values.user.count }}"
+        deployer:
+          domain: {{ .Values.deployer.domain }}
+        content:
+          repoUrl: {{ .Values.netsentinel.content.repoUrl }}
+          repoRef: {{ .Values.netsentinel.content.repoRef }}
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: netsentinel
+{{- end }}

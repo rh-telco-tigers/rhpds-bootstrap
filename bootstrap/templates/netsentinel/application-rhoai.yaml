@@ -1,34 +1,38 @@
-{{ if .Values.devspaces -}}
+{{ if .Values.rhoai -}}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: devspaces
+  name: rhoai
   namespace: openshift-gitops
 spec:
   project: default
   source:
     repoURL: {{ .Values.git.url }}
     targetRevision: {{ .Values.git.revision }}
-    path: {{ .Values.devspaces.path }}
+    path: {{ .Values.rhoai.path }}
     helm:
       values: |
-        namespace: {{ .Values.devspaces.namespace }}
         operator:
-          {{- if .Values.devspaces.startingCSV }}
-          startingCSV: {{ .Values.devspaces.startingCSV }}
+          namespace: {{ .Values.rhoai.namespace }}
+          {{- if .Values.rhoai.startingCSV }}
+          startingCSV: {{ .Values.rhoai.startingCSV }}
           {{- end }}
           installPlanApproval: Manual
+        patcher:
+          namespace: redhat-ods-applications
+          dashboard:
+            replicas: 1
         helper-status-checker:
           approver: true
           checks:
-            - operatorName: devspaces
+            - operatorName: rhods-operator
               namespace:
-                name: {{ .Values.devspaces.namespace }}
+                name: {{ .Values.rhoai.namespace }}
               syncwave: '1'
               serviceAccount:
-                name: "devspaces-status-checker"
+                name: "rhoai-status-checker"
   destination:
     server: https://kubernetes.default.svc
-    namespace: {{ .Values.devspaces.namespace }}
+    namespace: {{ .Values.rhoai.namespace }}
 {{- end }}

@@ -1,0 +1,17 @@
+{{ if .Values.amqstreams -}}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: servicemesh
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: {{ .Values.git.url }}
+    targetRevision: {{ .Values.git.revision }}
+    path: {{ .Values.servicemesh.path }}
+    helm:
+  destination:
+    server: https://kubernetes.default.svc
+{{- end }}

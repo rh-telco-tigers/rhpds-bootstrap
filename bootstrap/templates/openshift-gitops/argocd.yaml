@@ -1,4 +1,5 @@
-apiVersion: argoproj.io/v1alpha1
+{{- if .Values.argocd.install }}
+apiVersion: argoproj.io/v1beta1
 kind: ArgoCD
 metadata:
   name: openshift-gitops
@@ -6,6 +7,74 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: Validate=false
 spec:
+  controller:
+    resources:
+      limits:
+        cpu: 2000m
+        memory: 2048Mi
+      requests:
+        cpu: 250m
+        memory: 1024Mi
+  ha:
+    enabled: false
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+  rbac:
+    defaultPolicy: ''
+    policy: |
+      g, system:cluster-admins, role:admin
+      g, cluster-admins, role:admin
+    scopes: '[groups]'
+  redis:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+  repo:
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1024Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+  resourceExclusions: |
+    - apiGroups:
+      - tekton.dev
+      clusters:
+      - '*'
+      kinds:
+      - TaskRun
+      - PipelineRun        
+  server:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    route:
+      enabled: true
+  sso:
+    dex:
+      openShiftOAuth: true
+      resources:
+        limits:
+          cpu: 500m
+          memory: 256Mi
+        requests:
+          cpu: 250m
+          memory: 128Mi
+    provider: dex
   resourceHealthChecks:
     - group: operators.coreos.com
       kind: Subscription
@@ -46,3 +115,4 @@ spec:
           end
         end
         return health_status
+{{- end }}

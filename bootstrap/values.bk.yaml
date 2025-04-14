@@ -1,0 +1,95 @@
+# Default values for bootstrap.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+deployer:
+  domain: apps.cluster.opentlc.com
+  apiUrl: https://api.cluster.opentlc.com:6443
+
+git:
+  url: https://github.com/pandeybk/rhpds-ocp-cluster-addons.git
+  revision: main
+
+user:
+  count: "1"
+
+app:
+  netsentinel: true
+
+# Set to empty to NOT install the rhoai
+# rhoai: ''
+rhoai:
+  path: rhoai
+  namespace: redhat-ods-operator
+  # startingCSV: rhods-operator.x.y.z
+  # Set to empty to NOT install the datasciencecluster
+  # Not defining the key installs the datasciencecluster
+  # using the chart defaults (see rhoai/values.yaml)
+  datasciencecluster:
+    name: default-dsc
+
+# Set to empty to NOT install the web-terminal
+# webterminal: ''
+webterminal:
+  path: webterminal
+  # startingCSV: web-terminal.x.y.z
+
+# Set to empty to NOT install the amqstreams
+# amqstreams: ''
+amqstreams:
+  path: amq-streams
+
+# Set to empty to NOT install the serverless
+# serverless: ''
+serverless:
+  path: serverless
+
+# Set to empty to NOT install the servicemesh
+# servicemesh: ''
+servicemesh:
+  path: servicemesh2
+
+# Set to empty to NOT install the servicemesh
+# minio: ''
+minio:
+  path: minio
+
+# Set to empty to NOT install the milvus
+# milvus: ''
+milvus:
+  path: milvus
+
+netsentinel:
+  namespace: netsentinel
+  addons:
+    repoPath: k8s/helm
+    repoRef: helmcharts
+  content:
+    repoUrl: https://github.com/rh-telco-tigers/NetSentinel.git
+    repoRef: helmcharts
+
+
+gitops:
+  install: false
+  name: openshift-gitops-operator
+  namespace: openshift-gitops-operator
+  channel: latest
+  installPlanApproval: Automatic
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+  # startingCSV: openshift-gitops-operator.x.y.z
+
+argocd:
+  install: true
+  name: openshift-gitops
+  namespace: openshift-gitops
+
+rbac:
+  clusterRoleBinding:
+    clusterRole: cluster-admin
+    serviceAccount: openshift-gitops-argocd-application-controller
+  group:
+    name: cluster-admins
+    users:
+    - admin
+    - ssoadmin

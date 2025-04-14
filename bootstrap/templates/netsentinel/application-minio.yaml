@@ -1,0 +1,18 @@
+{{ if .Values.milvus -}}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: minio
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: {{ .Values.git.url }}
+    targetRevision: {{ .Values.git.revision }}
+    path: {{ .Values.minio.path }}
+    helm:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: netsentinel
+{{- end }}

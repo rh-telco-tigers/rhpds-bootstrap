@@ -1,85 +1,64 @@
-# Default values for bootstrap.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
 deployer:
   domain: apps.cluster.opentlc.com
   apiUrl: https://api.cluster.opentlc.com:6443
 
 git:
-  url: https://github.com/rhpds/ocp-cluster-addons
+  url: https://github.com/pandeybk/rhpds-ocp-cluster-addons.git
   revision: main
 
 user:
   count: "1"
 
-# Set to empty to NOT install the 3scale
-# threeScale: ''
-threeScale:
-  path: 3scale
-  namespace: 3scale
-  channel: threescale-2.14
-  # startingCSV: 3scale-operator.x.y.z
+apps:
+  netsentinel:
+    enabled: true
+    namespace: netsentinel
+    repo:
+      url: https://github.com/rh-telco-tigers/NetSentinel.git
+      ref: helmcharts
+    components:
+      rhoai:
+        path: rhoai
+        namespace: redhat-ods-operator
+        datasciencecluster:
+          name: default-dsc
+      webterminal:
+        path: webterminal
+      amqstreams:
+        path: amq-streams
+      serverless:
+        path: serverless
+      servicemesh:
+        path: servicemesh2
+      minio:
+        path: minio
+      milvus:
+        path: milvus
+      additional:
+        repoPath: k8s/helm
+        repoRef: helmcharts
 
-# Set to empty to NOT install the devspaces
-# devspaces: ''
-devspaces:
-  path: devspaces
-  namespace: openshift-operators
-  # startingCSV: devspacesoperator.x.y.z
+gitops:
+  operator:
+    install: false
+    name: openshift-gitops-operator
+    namespace: openshift-gitops-operator
+    channel: latest
+    installPlanApproval: Automatic
+    source: redhat-operators
+    sourceNamespace: openshift-marketplace
 
-# Set to empty to NOT install the rhoai
-# rhoai: ''
-rhoai:
-  path: rhoai
-  namespace: redhat-ods-operator
-  # startingCSV: rhods-operator.x.y.z
-  # Set to empty to NOT install the datasciencecluster
-  # Not defining the key installs the datasciencecluster
-  # using the chart defaults (see rhoai/values.yaml)
-  # datasciencecluster: ''
-  # datasciencecluster:
-  #   components:
-  #     dashboard:
-  #       managementState: Managed
-  #     workbenches:
-  #       managementState: Managed
+  argocd:
+    install: true
+    name: openshift-gitops
+    namespace: openshift-gitops
 
-# Set to empty to NOT install the rhsso
-# rhsso: ''
-rhsso:
-  path: rhsso
-  namespace: rhsso
-  # startingCSV: rhsso-operator.x.y.z
-  admin:
-    username: ssoadmin
-    password: r3dh4t1!
-
-# Set to empty to NOT install the web-terminal
-# webterminal: ''
-webterminal:
-  path: webterminal
-  # startingCSV: web-terminal.x.y.z
-
-# Set to empty to NOT install compliance
-# compliance: ''
-compliance:
-  path: compliance
-  namespace: openshift-compliance
-  # startingCSV: compliance-operator.x.y.z
-  config:
-    nodeSelector:
-      node-role.kubernetes.io/worker: ""
-    # NOTE: hypershift only
-    # env:
-    # - name: PLATFORM
-    #   value: "HyperShift"
-
-showroom:
-  namespace: showroom
-  addons:
-    repoPath: showroom
-    repoRef: showroom
-  content:
-    repoUrl: https://github.com/rhpds/showroom_template_default.git
-    repoRef: main
+  rbac:
+    clusterRoleBinding:
+      clusterRole: cluster-admin
+      serviceAccount: openshift-gitops-argocd-application-controller
+    group:
+      name: cluster-admins
+      users:
+        - admin
+        - ssoadmin
