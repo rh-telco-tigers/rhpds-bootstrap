@@ -5,7 +5,7 @@ source:
 
 gitops:
   operator:
-    install: true
+    install: false
     name: openshift-gitops-operator
     namespace: openshift-gitops-operator
     channel: latest
@@ -14,7 +14,7 @@ gitops:
     sourceNamespace: openshift-marketplace
 
   argocd:
-    install: true
+    install: false
     name: openshift-gitops
     namespace: openshift-gitops
 
