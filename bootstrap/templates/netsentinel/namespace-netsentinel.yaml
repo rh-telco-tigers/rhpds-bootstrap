@@ -1,0 +1,9 @@
+{{- if .Values.apps.netsentinel.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: netsentinel
+  labels:
+    modelmesh-enabled: "true"
+    opendatahub.io/dashboard: "true"
+{{- end }}
