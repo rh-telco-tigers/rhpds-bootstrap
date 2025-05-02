@@ -14,7 +14,7 @@ gitops:
     sourceNamespace: openshift-marketplace
 
   argocd:
-    install: false
+    install: true
     name: openshift-gitops
     namespace: openshift-gitops
 
